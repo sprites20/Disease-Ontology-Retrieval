@@ -44,26 +44,28 @@ def generate_plan(category, diseases, age, sex, weight, activity_level):
 
 @app.route('/api/generate-medical-data', methods=['POST'])
 def generate_medical_data():
-    data = request.get_json()
-    diseases = data.get('diseases', [])
-    age = data.get('age')
-    sex = data.get('sex')
-    weight = data.get('weight')
-    activity_level = data.get('activityLevel')
-    selected_categories = data.get('categories', [])
+    try:
+        data = request.get_json()
+        diseases = data.get('diseases', [])
+        age = data.get('age')
+        sex = data.get('sex')
+        weight = data.get('weight')
+        activity_level = data.get('activityLevel')
+        selected_categories = data.get('categories', [])
 
-    # Validation
-    if not diseases or not age or not sex or not weight or not activity_level:
-        return jsonify({"error": "All fields are required"}), 400
+        if not diseases or not age or not sex or not weight or not activity_level:
+            return jsonify({"error": "All fields are required"}), 400
 
-    if not selected_categories:
-        return jsonify({"error": "At least one category must be selected"}), 400
+        if not selected_categories:
+            return jsonify({"error": "At least one category must be selected"}), 400
 
-    result = {}
-    for category in selected_categories:
-        result[category] = generate_plan(category, diseases, age, sex, weight, activity_level)
+        result = {}
+        for category in selected_categories:
+            result[category] = generate_plan(category, diseases, age, sex, weight, activity_level)
 
-    return jsonify(result)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0')  # Allow Lambda to properly route

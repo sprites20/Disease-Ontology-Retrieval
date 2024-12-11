@@ -1,0 +1,9 @@
+{
+  "production": {
+    "app_function": "somemedicalserver.app",  
+    "aws_region": "us-east-1",  
+    "profile_name": "default",  
+    "project_name": "medical-plan-app",
+    "runtime": "python3.9",  
+  }
+}
